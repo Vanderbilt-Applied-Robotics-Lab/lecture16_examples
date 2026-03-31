@@ -3,46 +3,23 @@
 TeleopExample::TeleopExample(rclcpp::NodeOptions options) : Node("teleop_example", options)
 {
     // setup subscriber for joystick
-    joystick_sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
-        "joy", 
-        10,
-        std::bind(&TeleopExample::joystickCallback, this, std::placeholders::_1)
-    );
 
     // setup publisher for twist commands
-    twist_publisher_ = this->create_publisher<geometry_msgs::msg::TwistStamped>("/servo_node/delta_twist_cmds", 10);
 
-    // Setup frame
-    twist_msg_.header.frame_id = "meca_base_link";
+    // set base frame
 }
 
 void TeleopExample::mainTelemanipulation()
 {
-    twist_msg_.header.stamp = this->get_clock()->now();
+    // set time stamp
 
-    twist_publisher_->publish(twist_msg_);
+    // publish message
 }
 
 void TeleopExample::joystickCallback(const sensor_msgs::msg::Joy& msg)
 {
-    if (msg.buttons[0] == 0)
-    {
-        twist_msg_.twist.linear.x = -lin_gain_*msg.axes[1];
-        twist_msg_.twist.linear.y = -lin_gain_*msg.axes[0];
-        twist_msg_.twist.linear.z = lin_gain_*msg.axes[4];
-        twist_msg_.twist.angular.x = 0;
-        twist_msg_.twist.angular.y = 0;
-        twist_msg_.twist.angular.z = 0; 
-    }
-    else
-    {
-        twist_msg_.twist.linear.x = 0;
-        twist_msg_.twist.linear.y = 0;
-        twist_msg_.twist.linear.z = 0;
-        twist_msg_.twist.angular.x = -ang_gain_*msg.axes[1];
-        twist_msg_.twist.angular.y = -ang_gain_*msg.axes[0];
-        twist_msg_.twist.angular.z = ang_gain_*msg.axes[4]; 
-    }
+    // if A button is pressed control robot in translation
+    // else control in orientation
 }
 
 int main(int argc, char** argv)
@@ -58,12 +35,11 @@ int main(int argc, char** argv)
     auto node = std::make_shared<TeleopExample>(options);
     rclcpp::sleep_for(std::chrono::seconds(2));
 
-    // Set loop rate
-    rclcpp::Rate rate = rclcpp::Rate(100); // Hz
+    // Set loop rate to 100 hz
     
     while (rclcpp::ok())
     {
-        node->mainTelemanipulation();
+        // call mainTelemanipulation
         rclcpp::spin_some(node);
         rate.sleep();
     }
