@@ -41,7 +41,7 @@ private:
     geometry_msgs::msg::TwistStamped twist_msg_;
 
     double lin_gain_ = 0.05; // 10 mm/s max velocity
-    double ang_gain_ = 0.05; // 10 rad/s max velocity
+    double ang_gain_ = 0.1; // 10 rad/s max velocity
     
 };
 
