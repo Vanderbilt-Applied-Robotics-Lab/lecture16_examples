@@ -29,7 +29,7 @@ void TeleopExample::joystickCallback(const sensor_msgs::msg::Joy& msg)
     {
         twist_msg_.twist.linear.x = -lin_gain_*msg.axes[1];
         twist_msg_.twist.linear.y = -lin_gain_*msg.axes[0];
-        twist_msg_.twist.linear.z = lin_gain_*msg.axes[2];
+        twist_msg_.twist.linear.z = lin_gain_*msg.axes[4];
         twist_msg_.twist.angular.x = 0;
         twist_msg_.twist.angular.y = 0;
         twist_msg_.twist.angular.z = 0; 
@@ -41,7 +41,7 @@ void TeleopExample::joystickCallback(const sensor_msgs::msg::Joy& msg)
         twist_msg_.twist.linear.z = 0;
         twist_msg_.twist.angular.x = -ang_gain_*msg.axes[1];
         twist_msg_.twist.angular.y = -ang_gain_*msg.axes[0];
-        twist_msg_.twist.angular.z = ang_gain_*msg.axes[2];; 
+        twist_msg_.twist.angular.z = ang_gain_*msg.axes[4]; 
     }
 }
 
